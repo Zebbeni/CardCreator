@@ -1,4 +1,4 @@
-public class TemplateDrawer
+public class TemplateCanvas extends Panel
 {
   PGraphics drawPG;
   PGraphics fontPlacer;
@@ -8,13 +8,9 @@ public class TemplateDrawer
   ArrayList<Element> elements;
   Table contents;
   
-  int canvasWidth;
-  int canvasHeight;
-  int x = 0;
-  int y = 0;
-  int offsetX = 300;
-  int offsetY = 100;
-  float zoom = 0.5;
+//  int offsetX = 300;
+//  int offsetY = 100;
+//  float zoom = 0.5;
   int pgWidth;
   int pgHeight;
   
@@ -32,27 +28,33 @@ public class TemplateDrawer
   int lastMX;
   int lastMY;
   
-  TemplateDrawer (ArrayList<Element> e, Table conts, int canW, int canH)
+  TemplateCanvas (ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
   {
+    x = xx;
+    y = yy;
     elements = e;
-    canvasWidth = canW;
-    canvasHeight = canH;
+    wid = canW;
+    hei = canH;
     contents = conts;
   }
   
   void drawAll()
   {
-    drawPG = createGraphics(width,height);
+    drawPG = createGraphics(wid,hei);
     drawPG.beginDraw();
     drawCanvas();
     drawElements();
     drawPG.endDraw();
   }
   
+  void updateDraw()
+  {
+  }
+  
   void drawCanvas()
   {
     drawPG.fill(150);
-    drawPG.rect(offsetX, offsetY, canvasWidth*zoom, canvasHeight*zoom);
+    drawPG.rect(0, 0, wid, hei);
   }
   
   void drawElements()
@@ -61,10 +63,10 @@ public class TemplateDrawer
     {
       e.updatePosition();
       
-      int cx = int(e.x * zoom) + offsetX;
-      int cy = int(e.y * zoom) + offsetY;
-      int cwid = int(e.wid * zoom);
-      int chei = int(e.hei * zoom);
+      int cx = int(e.x);
+      int cy = int(e.y);
+      int cwid = int(e.wid);
+      int chei = int(e.hei);
       
       drawPG.noStroke();
       if (doContent && contentExample != NONE)
@@ -84,7 +86,7 @@ public class TemplateDrawer
     int alpha = 50;
     if ( e.hovered )
     {
-      drawPG.fill(255,255,255,int(75 * fade));
+      drawPG.fill(255,255,255,100);
     }
     else if ( e.type == IMG )
     {
@@ -94,7 +96,7 @@ public class TemplateDrawer
     {
       drawPG.fill(100,100,255,alpha);
     }
-    drawPG.rect((e.x * zoom) + offsetX, (e.y * zoom) + offsetY, e.wid * zoom, e.hei*zoom);
+    drawPG.rect(e.x, e.y, e.wid, e.hei);
   }
   
   void drawContent( Element e , int cx , int cy , int cwid , int chei )
@@ -115,7 +117,7 @@ public class TemplateDrawer
       fontPlacer = createGraphics(int(cwid/hSquish),chei);
       fontPlacer.beginDraw();
       fontPlacer.textFont(e.font);
-      fontPlacer.textSize(e.fontSize*zoom);
+      fontPlacer.textSize(e.fontSize);
       fontPlacer.textAlign(LEFT,TOP);
       fontPlacer.fill(e.col);
       try {
@@ -134,7 +136,7 @@ public class TemplateDrawer
     {
       drawPG.stroke(200);
       drawPG.strokeWeight(2);
-      drawPG.fill(255,255,255,fade*100);
+      drawPG.fill(255,255,255,50);
       if( isDragging )
       {
         drawPG.stroke(200,200,200,255);
@@ -200,8 +202,8 @@ public class TemplateDrawer
   {
     if(resizing[1] == BORDER_TOP)
     {
-      e.realY += (my - lastMY) / zoom;
-      e.realHei -= (my - lastMY) / zoom;
+      e.realY += (my - lastMY);
+      e.realHei -= (my - lastMY);
       if(keyPressed && keyCode == SHIFT)
       {
           e.realWid = e.realHei * widHeiRatio;
@@ -210,7 +212,7 @@ public class TemplateDrawer
     }
     else if(resizing[1] == BORDER_BOTTOM)
     {
-      e.realHei += (my - lastMY) / zoom;
+      e.realHei += (my - lastMY);
       if(keyPressed && keyCode == SHIFT)
       {
         e.realWid = e.realHei * widHeiRatio;
@@ -219,7 +221,7 @@ public class TemplateDrawer
     
     if(resizing[0] == BORDER_RIGHT)
     {
-      e.realWid += (mx - lastMX) / zoom;
+      e.realWid += (mx - lastMX);
       if(keyPressed && keyCode == SHIFT)
       {
         e.realHei = e.realWid / widHeiRatio;
@@ -227,8 +229,8 @@ public class TemplateDrawer
     }
     else if(resizing[0] == BORDER_LEFT)
     {
-      e.realX += (mx - lastMX) / zoom;
-      e.realWid -= (mx - lastMX) / zoom;
+      e.realX += (mx - lastMX);
+      e.realWid -= (mx - lastMX);
       if(keyPressed && keyCode == SHIFT)
       {
         e.realHei = e.realWid / widHeiRatio;
@@ -243,16 +245,16 @@ public class TemplateDrawer
   
   void dragCanvas(int mx, int my)
   {
-    offsetX += (mx - lastMX);
-    offsetY += (my - lastMY);
+    x += (mx - lastMX);
+    y += (my - lastMY);
     resetLastMouse(mx,my);
     constrainOffsets();
   }
   
   void dragElement(Element e, int mx, int my)
   {
-    e.realX += (mx - lastMX) / zoom;
-    e.realY += (my - lastMY) / zoom;
+    e.realX += (mx - lastMX);
+    e.realY += (my - lastMY);
     resetLastMouse(mx,my);
   }
   
@@ -279,20 +281,20 @@ public class TemplateDrawer
       Element e = elements.get(selectId);
       if(keyCode == UP)
       {
-        e.move(0, -1 * ceil( move_step / zoom) ); 
+        e.move(0, -1 * ceil( move_step ) ); 
         println("moving up");
       }
       else if(keyCode == DOWN)
       {
-        e.move(0, ceil(move_step / zoom));
+        e.move(0, ceil(move_step ));
       }
       else if(keyCode == LEFT)
       {
-        e.move( -1 * ceil(move_step / zoom ) , 0);
+        e.move( -1 * ceil(move_step ) , 0);
       }
       else
       {
-        e.move( ceil(move_step / zoom ) , 0);
+        e.move( ceil(move_step ) , 0);
       }
     }
     else if(doContent)
@@ -308,35 +310,35 @@ public class TemplateDrawer
     }
   }
   
-  void zoomIn()
-  {
-    zoom *= 1.2;
-    offsetX -= int(50 * drawer.zoom);
-    offsetY -= int(50 * drawer.zoom);
-    constrainOffsets();
-  }
-  
-  void zoomOut()
-  {
-    drawer.zoom /= 1.2;
-    drawer.offsetX += int(50 * drawer.zoom);
-    drawer.offsetY += int(50 * drawer.zoom);
-    constrainOffsets();
-  }
-  
-  void constrainOffsets()
-  {
-    offsetX = constrain(offsetX , int(canvasWidth * zoom * -1) + 200, width - 200);
-    offsetY = constrain(offsetY , int(canvasHeight * zoom * -1) + 200, height - 200);
-  }
+//  void zoomIn()
+//  {
+//    zoom *= 1.2;
+//    offsetX -= int(50 * canvas.zoom);
+//    offsetY -= int(50 * canvas.zoom);
+//    constrainOffsets();
+//  }
+//  
+//  void zoomOut()
+//  {
+//    canvas.zoom /= 1.2;
+//    canvas.offsetX += int(50 * canvas.zoom);
+//    canvas.offsetY += int(50 * canvas.zoom);
+//    constrainOffsets();
+//  }
+//  
+//  void constrainOffsets()
+//  {
+//    offsetX = constrain(offsetX , int(wid * zoom * -1) + 200, width - 200);
+//    offsetY = constrain(offsetY , int(hei * zoom * -1) + 200, height - 200);
+//  }
   
   void setResizing( Element e, int mx, int my)
   {
     resizing[0] = NONE;
     resizing[1] = NONE;
     
-    int dispX = int(e.x * zoom) + offsetX;
-    int dispY = int(e.y * zoom) + offsetY;
+    int dispX = int(e.x * zoom);
+    int dispY = int(e.y * zoom);
     int dispW = int(e.wid * zoom);
     int dispH = int(e.hei * zoom);
     
