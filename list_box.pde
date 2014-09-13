@@ -3,10 +3,10 @@ public void itemClicked ( int i, Object item )
     lastItemClicked = item;
 }
 
-public class Listbox
+public class Listbox extends Panel
 {
     PGraphics listPG;
-    int x, y, listHeight;
+    int listHeight;
     
     ArrayList<Element> items;
     int selectedItem = NONE;
@@ -29,7 +29,7 @@ public class Listbox
     
     Listbox ( int xx, int yy, int ww, int hh, int ih, ArrayList<Element> e )
     {
-        x = xx; y = yy;
+        x = xx; y = yy; wid = ww; hei = hh;
         pgWidth = ww;
         pgHeight = hh;
         listPG = createGraphics(pgWidth, pgHeight);
@@ -62,6 +62,10 @@ public class Listbox
     {
         scrollDist += (step*5);
         scrollDist = constrain( scrollDist, 0, maxScrollDist <= 0 ? 0 : maxScrollDist );
+    }
+    
+    void updateDraw()
+    {
     }
     
     void drawList ()
