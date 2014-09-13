@@ -8,11 +8,8 @@ public class TemplateCanvas extends Panel
   ArrayList<Element> elements;
   Table contents;
   
-//  int offsetX = 300;
-//  int offsetY = 100;
-//  float zoom = 0.5;
-  int pgWidth;
-  int pgHeight;
+  int canvasWid;
+  int canvasHei;
   
   int contentExample = 0;
   
@@ -33,13 +30,15 @@ public class TemplateCanvas extends Panel
     x = xx;
     y = yy;
     elements = e;
-    wid = canW;
-    hei = canH;
+    canvasWid = canW;
+    canvasHei = canH;
     contents = conts;
   }
   
   void drawAll()
   {
+    wid = int(canvasWid * zoom);
+    hei = int(canvasHei * zoom);
     drawPG = createGraphics(wid,hei);
     drawPG.beginDraw();
     drawCanvas();
@@ -63,10 +62,10 @@ public class TemplateCanvas extends Panel
     {
       e.updatePosition();
       
-      int cx = int(e.x);
-      int cy = int(e.y);
-      int cwid = int(e.wid);
-      int chei = int(e.hei);
+      int cx = int(e.x * zoom);
+      int cy = int(e.y * zoom);
+      int cwid = int(e.wid * zoom);
+      int chei = int(e.hei * zoom);
       
       drawPG.noStroke();
       if (doContent && contentExample != NONE)
@@ -96,7 +95,7 @@ public class TemplateCanvas extends Panel
     {
       drawPG.fill(100,100,255,alpha);
     }
-    drawPG.rect(e.x, e.y, e.wid, e.hei);
+    drawPG.rect( int(e.x * zoom), int(e.y * zoom), int(e.wid * zoom), int(e.hei * zoom));
   }
   
   void drawContent( Element e , int cx , int cy , int cwid , int chei )
@@ -117,7 +116,7 @@ public class TemplateCanvas extends Panel
       fontPlacer = createGraphics(int(cwid/hSquish),chei);
       fontPlacer.beginDraw();
       fontPlacer.textFont(e.font);
-      fontPlacer.textSize(e.fontSize);
+      fontPlacer.textSize(constrain(e.fontSize * zoom,0,chei));
       fontPlacer.textAlign(LEFT,TOP);
       fontPlacer.fill(e.col);
       try {

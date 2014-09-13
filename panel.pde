@@ -6,4 +6,6 @@ public abstract class Panel
   int hei;
   
   public abstract void updateDraw();
+  
+  
 }

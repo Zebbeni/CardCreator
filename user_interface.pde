@@ -41,7 +41,7 @@ void draw ()
   
   image(listbox.listPG,listbox.x,listbox.y);
 
-  buffer.image(canvas.drawPG,canvas.x,canvas.y,int(canvas.wid*zoom),int(canvas.hei*zoom));
+  buffer.image(canvas.drawPG,canvas.x,canvas.y);
   buffer.image(tools.drawPG,tools.x,tools.y);
   buffer.image(listbox.listPG,listbox.x,listbox.y);
   buffer.endDraw();
@@ -123,6 +123,8 @@ void zoom(float zm)
   zoom *= zm;
   canvas.x += int(25 * ( zm - 1 ));
   canvas.y += int(25 * ( zm - 1 ));
+  canvas.wid = int(canvas.canvasWid * zoom);
+  canvas.hei = int(canvas.canvasHei * zoom);
   constrainOffsets();
 }
 
