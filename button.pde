@@ -1,9 +1,5 @@
-public class Button
+public class Button extends Panel
 {
-  int x;
-  int y;
-  int wid;
-  int hei;
   PGraphics drawPG;
   
   Button ( int xx , int yy , int ww , int hh, PGraphics pGraph )
@@ -25,5 +21,9 @@ public class Button
   void updatePosition()
   {
     
+  }
+  
+  void updateDraw()
+  {
   }
 }

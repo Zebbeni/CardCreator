@@ -1,9 +1,5 @@
-public class Toolbar
+public class Toolbar extends Panel
 {
-  int x;
-  int y;
-  int wid;
-  int hei;
   PGraphics drawPG;
   
   ArrayList<Button> buttons;
@@ -34,6 +30,10 @@ public class Toolbar
   void addButton( Button b )
   {
     buttons.add(b);
+  }
+  
+  void updateDraw()
+  {
   }
   
   void drawAll()

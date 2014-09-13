@@ -2,6 +2,6 @@ element,type,x,y,w,h,font,fontsize,hSquish,colorHex
 Background,image,0,0,675,1050,,0,1.0,FFFFFF
 Picture,image,55,163,560,505,,0,1.0,FFFFFF
 Name,text,174,79,434,56,Sansation-Bold-48.vlw,60,0.6,
-Main,text,56,705,554,183,Sansation-Regular-48.vlw,45,0.6,
+Main,text,60,707,554,183,Sansation-Regular-48.vlw,45,0.6,
 Icon,image,50,50,100,100,,0,1.0,FFFFFF
 Italic,text,58,942,550,42,Sansation-Italic-48.vlw,35,0.6,3344FF

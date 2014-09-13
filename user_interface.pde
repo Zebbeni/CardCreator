@@ -4,12 +4,11 @@ PGraphics buffer;
 Listbox listbox;
 ContentHandler content;
 TemplateHandler template;
-TemplateDrawer drawer;
+TemplateCanvas canvas;
 Toolbar tools;
 Object lastItemClicked;
 
-float time = 0.0;
-float fade;
+float zoom = 0.6;
 
 void setup ()
 {
@@ -25,27 +24,24 @@ void setup ()
     template = new TemplateHandler();
     listbox = new Listbox( width - 150 , 35 , 150 , 400 , 50 , template.elements );
     content = new ContentHandler( );
-    drawer = new TemplateDrawer(template.elements, content.table, 675, 1050);
+    canvas = new TemplateCanvas(template.elements, content.table, 200, 30, 675, 1050);
     tools = new Toolbar( width - 150 , 0 , 150 , 35 );
 }
 
 void draw ()
 {
-  time = (time + 0.1) % (PI);
-  fade = (sin(time) * 0.2) + 0.8;
-
   buffer = createGraphics(width, height);
   buffer.clear();
   buffer.beginDraw();
-  buffer.background( 50 );
-  drawer.drawAll();
+  buffer.background( 75 );
+  canvas.drawAll();
   tools.drawAll();
   
   listbox.drawList();
   
   image(listbox.listPG,listbox.x,listbox.y);
 
-  buffer.image(drawer.drawPG,drawer.x,drawer.y);
+  buffer.image(canvas.drawPG,canvas.x,canvas.y);
   buffer.image(tools.drawPG,tools.x,tools.y);
   buffer.image(listbox.listPG,listbox.x,listbox.y);
   buffer.endDraw();
@@ -68,14 +64,14 @@ void mouseMoved()
 
 void mouseDragged()
 {
-  if (drawer.handleDragged(mouseX,mouseY,listbox.selectedItem)){
+  if (canvas.handleDragged(mouseX,mouseY,listbox.selectedItem)){
     
   }
 }
 
 void mouseReleased()
 {
-  drawer.handleReleased(mouseX,mouseY);
+  canvas.handleReleased(mouseX,mouseY);
 }
 
 void keyPressed ()
@@ -114,12 +110,28 @@ void keyReleased ()
 {
   if(key == '=')
   {
-    drawer.zoomIn();
+    zoom(1.25);
   }
   else if(key == '-')
   {
-    drawer.zoomOut();
+    zoom(0.8);
   }
+}
+
+void zoom(float zm)
+{
+  zoom *= zm;
+  canvas.x += int(25 * ( zm - 1 ));
+  canvas.y += int(25 * ( zm - 1 ));
+  canvas.wid = int(canvas.canvasWid * zoom);
+  canvas.hei = int(canvas.canvasHei * zoom);
+  constrainOffsets();
+}
+
+void constrainOffsets()
+{
+  canvas.x = constrain(canvas.x , int(-0.8 * canvas.wid), width - 50);
+  canvas.y = constrain(canvas.y , int(-0.8 * canvas.hei), height - 50);
 }
 
 void addElement()
@@ -143,17 +155,17 @@ void removeElement()
 public void handleArrowPress(  )
 {
   int selectedId = listbox.selectedItem;
-  drawer.handleArrowPress( selectedId );
+  canvas.handleArrowPress( selectedId );
 }
 
 public void toggleDrawHighlights()
 {
-  drawer.toggleHighlight();
+  canvas.toggleHighlight();
 }
 
 void toggleDrawContent()
 {
-  drawer.toggleContent();
+  canvas.toggleContent();
 }
 
 void saveTemplate()
