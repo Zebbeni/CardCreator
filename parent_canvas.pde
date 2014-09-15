@@ -1,6 +1,5 @@
-public class TemplateCanvas extends Panel
+public class TemplateCanvas extends ParentPanel
 {
-  PGraphics drawPG;
   PGraphics fontPlacer;
   PImage cardPic;
   PFont drawFont;
@@ -25,32 +24,25 @@ public class TemplateCanvas extends Panel
   int lastMX;
   int lastMY;
   
-  TemplateCanvas (ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
+  TemplateCanvas (String nm, ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
   {
-    x = xx;
-    y = yy;
+    name = nm; x = xx; y = yy; wid = int(canW * zoom); hei = int(canH * zoom);
     elements = e;
     canvasWid = canW;
     canvasHei = canH;
     contents = conts;
+    drawPG = createGraphics(wid,hei);
   }
   
-  void drawAll()
+  public void updateThis()
   {
     wid = int(canvasWid * zoom);
     hei = int(canvasHei * zoom);
-    drawPG = createGraphics(wid,hei);
-    drawPG.beginDraw();
     drawCanvas();
     drawElements();
-    drawPG.endDraw();
   }
   
-  void updateDraw()
-  {
-  }
-  
-  void drawCanvas()
+  public void drawCanvas()
   {
     drawPG.fill(150);
     drawPG.rect(0, 0, wid, hei);
@@ -263,13 +255,17 @@ public class TemplateCanvas extends Panel
     lastMY = my;
   }
   
-  void handleReleased(int mx, int my)
+  void clickThis()
   {
     if( isDragging )
     {
       isDragging = false;
       resizing[0] = NONE;
       resizing[1] = NONE;
+    }
+    else
+    {
+      println("Clicked ", name);
     }
   }
   
@@ -308,28 +304,6 @@ public class TemplateCanvas extends Panel
       }
     }
   }
-  
-//  void zoomIn()
-//  {
-//    zoom *= 1.2;
-//    offsetX -= int(50 * canvas.zoom);
-//    offsetY -= int(50 * canvas.zoom);
-//    constrainOffsets();
-//  }
-//  
-//  void zoomOut()
-//  {
-//    canvas.zoom /= 1.2;
-//    canvas.offsetX += int(50 * canvas.zoom);
-//    canvas.offsetY += int(50 * canvas.zoom);
-//    constrainOffsets();
-//  }
-//  
-//  void constrainOffsets()
-//  {
-//    offsetX = constrain(offsetX , int(wid * zoom * -1) + 200, width - 200);
-//    offsetY = constrain(offsetY , int(hei * zoom * -1) + 200, height - 200);
-//  }
   
   void setResizing( Element e, int mx, int my)
   {

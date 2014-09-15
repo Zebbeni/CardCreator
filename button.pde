@@ -1,29 +1,24 @@
-public class Button extends Panel
+public class Button extends ChildPanel
 {
-  PGraphics drawPG;
-  
-  Button ( int xx , int yy , int ww , int hh, PGraphics pGraph )
+  Button ( String nm , int xx , int yy , int ww , int hh )
   {
+    name = nm;
     x = xx;
     y = yy;
     wid = ww;
     hei = hh;
-    drawPG = pGraph;
+    drawPG = createGraphics( wid, hei );
   }
   
-  void drawButton()
+  public void clickThis()
   {
-    updatePosition();
+    println("clicked ", name);
+  }
+  
+  public void updateThis()
+  {
+    drawPG.strokeWeight(2);
     drawPG.fill(150);
-    drawPG.rect( x , y , wid , hei );
-  }
-  
-  void updatePosition()
-  {
-    
-  }
-  
-  void updateDraw()
-  {
+    drawPG.rect( 0 , 0 , wid , hei );
   }
 }
