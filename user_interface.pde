@@ -1,19 +1,17 @@
 import de.bezier.guido.*;
 
-PGraphics buffer;
+PGraphics bufferPG;
 Listbox listbox;
 ContentHandler content;
 TemplateHandler template;
 TemplateCanvas canvas;
 Toolbar tools;
-Object lastItemClicked;
-
-float zoom = 0.6;
+Interface mainInterface;
 
 void setup ()
 {
     size(1000, 700);
-    buffer = createGraphics(width, height);
+    bufferPG = createGraphics(width, height);
     frameRate(30);
     frame.setResizable(true);
     
@@ -22,37 +20,28 @@ void setup ()
     
     // create a list box
     template = new TemplateHandler();
-    listbox = new Listbox( width - 150 , 35 , 150 , 400 , 50 , template.elements );
+    listbox = new Listbox("element menu", width - 150 , 35 , 150 , 400 , 50 , template.elements );
     content = new ContentHandler( );
-    canvas = new TemplateCanvas(template.elements, content.table, 200, 30, 675, 1050);
-    tools = new Toolbar( width - 150 , 0 , 150 , 35 );
+    canvas = new TemplateCanvas("canvas", template.elements, content.table, 200, 30, 675, 1050);
+    tools = new Toolbar("toolbar", width - 150 , 0 , 150 , 35 );
+    
+    ArrayList<Panel> parentPanels = new ArrayList<Panel>();
+    parentPanels.add(canvas);
+    parentPanels.add(listbox);
+    parentPanels.add(tools);
+    
+    mainInterface = new Interface("main interface", parentPanels);
 }
 
 void draw ()
 {
-  buffer = createGraphics(width, height);
-  buffer.clear();
-  buffer.beginDraw();
-  buffer.background( 75 );
-  canvas.drawAll();
-  tools.drawAll();
+  bufferPG = createGraphics(width, height);
+  bufferPG.clear();
+  bufferPG.beginDraw();
+  mainInterface.refresh();
   
-  listbox.drawList();
-  
-  image(listbox.listPG,listbox.x,listbox.y);
-
-  buffer.image(canvas.drawPG,canvas.x,canvas.y);
-  buffer.image(tools.drawPG,tools.x,tools.y);
-  buffer.image(listbox.listPG,listbox.x,listbox.y);
-  buffer.endDraw();
-  image(buffer,0,0);
-}
-
-void mousePressed ()
-{
-  if (listbox.handleClicked(mouseX,mouseY)){
-    
-  }
+  bufferPG.endDraw();
+  image(bufferPG,0,0);
 }
 
 void mouseMoved()
@@ -71,7 +60,7 @@ void mouseDragged()
 
 void mouseReleased()
 {
-  canvas.handleReleased(mouseX,mouseY);
+  mainInterface.click(mouseX,mouseY);
 }
 
 void keyPressed ()
@@ -116,59 +105,4 @@ void keyReleased ()
   {
     zoom(0.8);
   }
-}
-
-void zoom(float zm)
-{
-  zoom *= zm;
-  canvas.x += int(25 * ( zm - 1 ));
-  canvas.y += int(25 * ( zm - 1 ));
-  canvas.wid = int(canvas.canvasWid * zoom);
-  canvas.hei = int(canvas.canvasHei * zoom);
-  constrainOffsets();
-}
-
-void constrainOffsets()
-{
-  canvas.x = constrain(canvas.x , int(-0.8 * canvas.wid), width - 50);
-  canvas.y = constrain(canvas.y , int(-0.8 * canvas.hei), height - 50);
-}
-
-void addElement()
-{
-  Element e = new Element("New Element", IMG, 2, 2, 200, 250);
-  listbox.addItem(e);
-  content.table.addColumn(e.name);
-}
-
-void removeElement()
-{
-  int selectedId = listbox.selectedItem;
-  if (selectedId != NONE)
-  {
-    Element e = listbox.items.get(selectedId);
-    content.table.removeColumn(e.name);
-    listbox.removeItem(e);
-  }
-}
-
-public void handleArrowPress(  )
-{
-  int selectedId = listbox.selectedItem;
-  canvas.handleArrowPress( selectedId );
-}
-
-public void toggleDrawHighlights()
-{
-  canvas.toggleHighlight();
-}
-
-void toggleDrawContent()
-{
-  canvas.toggleContent();
-}
-
-void saveTemplate()
-{
-  template.saveTemplate();
 }

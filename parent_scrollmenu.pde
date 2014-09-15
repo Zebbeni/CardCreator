@@ -1,11 +1,5 @@
-public void itemClicked ( int i, Object item )
+public class Listbox extends ParentPanel
 {
-    lastItemClicked = item;
-}
-
-public class Listbox extends Panel
-{
-    PGraphics listPG;
     int listHeight;
     
     ArrayList<Element> items;
@@ -22,19 +16,17 @@ public class Listbox extends Panel
     int scrollDist = 0;
     
     int maxScrollDist = 0;
-    
-    int pgHeight;
-    int pgWidth;
+
     int listStartAt = 0;
     
-    Listbox ( int xx, int yy, int ww, int hh, int ih, ArrayList<Element> e )
+    Listbox ( String nm , int xx, int yy, int ww, int hh, int ih, ArrayList<Element> e)
     {
-        x = xx; y = yy; wid = ww; hei = hh;
-        pgWidth = ww;
-        pgHeight = hh;
-        listPG = createGraphics(pgWidth, pgHeight);
+        name = nm; x = xx; y = yy; wid = ww; hei = hh;
+        wid = ww;
+        hei = hh;
+        drawPG = createGraphics(wid, hei);
         
-        itemHeight = ih; itemWidth = pgWidth - scrolltabWidth;
+        itemHeight = ih; itemWidth = wid - scrolltabWidth;
         
         items = e;
         calculateListHeight();
@@ -64,65 +56,61 @@ public class Listbox extends Panel
         scrollDist = constrain( scrollDist, 0, maxScrollDist <= 0 ? 0 : maxScrollDist );
     }
     
-    void updateDraw()
-    {
-    }
-    
-    void drawList ()
+    void updateThis ()
     {  
         updatePosition();
-        listPG.beginDraw();
-        listPG.background(200);
-        listPG.noStroke();
-        listPG.fill( 100 );
-        listPG.rect( 0 , 0 - scrollDist, pgWidth , listHeight );
+        drawPG.beginDraw();
+        drawPG.background(200);
+        drawPG.noStroke();
+        drawPG.fill( 100 );
+        drawPG.rect( 0 , 0 - scrollDist, wid , listHeight );
         if ( items != null )
         {
             for ( int i = 0; i < items.size(); i++ )
             {
-                listPG.stroke( 80 );
-                listPG.fill( 200 );
+                drawPG.stroke( 80 );
+                drawPG.fill( 200 );
                 if (items.get(i).selected)
                 {
-                  listPG.fill( 255 );
+                  drawPG.fill( 255 );
                 }
                 else if(items.get(i).hovered)
                 {
-                  listPG.fill(215);
+                  drawPG.fill(215);
                 }
-                listPG.rect( 0, (i*itemHeight) - scrollDist, pgWidth, itemHeight );
+                drawPG.rect( 0, (i*itemHeight) - scrollDist, wid, itemHeight );
                 
-                listPG.noStroke();
-                listPG.fill( 0 );
-                listPG.text( items.get(i+listStartAt).name, 25, (i+1)*(itemHeight) - 20 - scrollDist );
+                drawPG.noStroke();
+                drawPG.fill( 0 );
+                drawPG.text( items.get(i+listStartAt).name, 25, (i+1)*(itemHeight) - 20 - scrollDist );
             }
         }
         
         //draw scrollbar
-        listPG.stroke(80);
-        listPG.fill(100);
-        listPG.rect(itemWidth, 0, pgWidth, pgHeight);
-        listPG.fill(200);
-        listPG.rect(scrolltabX, scrolltabY, scrolltabWidth, scrolltabHeight);
+        drawPG.stroke(80);
+        drawPG.fill(100);
+        drawPG.rect(itemWidth, 0, wid, hei);
+        drawPG.fill(200);
+        drawPG.rect(scrolltabX, scrolltabY, scrolltabWidth, scrolltabHeight);
 
-        listPG.endDraw();
+        drawPG.endDraw();
     }
     
     /**
      * update x position and list height in case window is resized
      */
     void updatePosition(){
-      x = width - pgWidth;
-      pgHeight = height - y - 100;
+      x = width - wid;
+      hei = height - y - 100;
       updateMaxScrollDist();
       updateScrollTab();
-      listPG = createGraphics(pgWidth, pgHeight);
+      drawPG = createGraphics(wid, hei);
     }
     
     void updateMaxScrollDist()
     {
       calculateListHeight();
-      maxScrollDist = listHeight - pgHeight;
+      maxScrollDist = listHeight - hei;
     }
     
     void calculateListHeight(){
@@ -131,15 +119,15 @@ public class Listbox extends Panel
     
     void updateScrollTab()
     {
-      scrolltabHeight = int(float(pgHeight * pgHeight) / float(listHeight));
-      scrolltabHeight = constrain(scrolltabHeight, 0, pgHeight);
+      scrolltabHeight = int(float(hei * hei) / float(listHeight));
+      scrolltabHeight = constrain(scrolltabHeight, 0, hei);
       scrolltabX = itemWidth;
-      scrolltabY = int(float(pgHeight * scrollDist) / float(listHeight)); //tabY is relative to listPG 
+      scrolltabY = int(float(hei * scrollDist) / float(listHeight)); //tabY is relative to drawPG 
     }
     
     boolean handleMoved ( int mx, int my)
     {
-      if(inArea(mx,my))
+      if(isInPanel(mx,my))
       {
         if(inItem(mx,my))
         {
@@ -150,26 +138,6 @@ public class Listbox extends Panel
       else
       {
         unHover();
-        return false;
-      }
-    }
-    
-    boolean handleClicked ( int mx, int my)
-    {
-      if(inArea(mx,my))
-      {
-        if(inItem(mx,my))
-        {
-          selectItem(my);
-        }
-        else if(inScrollbar(mx,my))
-        {
-          clickScrollBar(my);
-        }
-        return true;
-      }
-      else
-      {
         return false;
       }
     }
@@ -234,10 +202,9 @@ public class Listbox extends Panel
       println("clicked the scrollbar");
     }
     
-    boolean inArea( int mx, int my)
+    void clickThis()
     {
-      boolean isInArea = (mx > x && mx < x + pgWidth && my > y && my < y + pgHeight);
-      return isInArea; 
+      println("Clicked ", name);
     }
     
     boolean inItem( int mx, int my)
