@@ -1,6 +1,5 @@
-public class TemplateCanvas extends Panel
+public class TemplateCanvas extends ParentPanel
 {
-  PGraphics drawPG;
   PGraphics fontPlacer;
   PImage cardPic;
   PFont drawFont;
@@ -8,11 +7,8 @@ public class TemplateCanvas extends Panel
   ArrayList<Element> elements;
   Table contents;
   
-//  int offsetX = 300;
-//  int offsetY = 100;
-//  float zoom = 0.5;
-  int pgWidth;
-  int pgHeight;
+  int canvasWid;
+  int canvasHei;
   
   int contentExample = 0;
   
@@ -28,30 +24,25 @@ public class TemplateCanvas extends Panel
   int lastMX;
   int lastMY;
   
-  TemplateCanvas (ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
+  TemplateCanvas (String nm, ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
   {
-    x = xx;
-    y = yy;
+    name = nm; x = xx; y = yy; wid = int(canW * zoom); hei = int(canH * zoom);
     elements = e;
-    wid = canW;
-    hei = canH;
+    canvasWid = canW;
+    canvasHei = canH;
     contents = conts;
+    drawPG = createGraphics(wid,hei);
   }
   
-  void drawAll()
+  public void updateThis()
   {
-    drawPG = createGraphics(wid,hei);
-    drawPG.beginDraw();
+    wid = int(canvasWid * zoom);
+    hei = int(canvasHei * zoom);
     drawCanvas();
     drawElements();
-    drawPG.endDraw();
   }
   
-  void updateDraw()
-  {
-  }
-  
-  void drawCanvas()
+  public void drawCanvas()
   {
     drawPG.fill(150);
     drawPG.rect(0, 0, wid, hei);
@@ -63,10 +54,10 @@ public class TemplateCanvas extends Panel
     {
       e.updatePosition();
       
-      int cx = int(e.x);
-      int cy = int(e.y);
-      int cwid = int(e.wid);
-      int chei = int(e.hei);
+      int cx = int(e.x * zoom);
+      int cy = int(e.y * zoom);
+      int cwid = int(e.wid * zoom);
+      int chei = int(e.hei * zoom);
       
       drawPG.noStroke();
       if (doContent && contentExample != NONE)
@@ -96,7 +87,7 @@ public class TemplateCanvas extends Panel
     {
       drawPG.fill(100,100,255,alpha);
     }
-    drawPG.rect(e.x, e.y, e.wid, e.hei);
+    drawPG.rect( int(e.x * zoom), int(e.y * zoom), int(e.wid * zoom), int(e.hei * zoom));
   }
   
   void drawContent( Element e , int cx , int cy , int cwid , int chei )
@@ -117,7 +108,7 @@ public class TemplateCanvas extends Panel
       fontPlacer = createGraphics(int(cwid/hSquish),chei);
       fontPlacer.beginDraw();
       fontPlacer.textFont(e.font);
-      fontPlacer.textSize(e.fontSize);
+      fontPlacer.textSize(constrain(e.fontSize * zoom,0,chei));
       fontPlacer.textAlign(LEFT,TOP);
       fontPlacer.fill(e.col);
       try {
@@ -264,13 +255,17 @@ public class TemplateCanvas extends Panel
     lastMY = my;
   }
   
-  void handleReleased(int mx, int my)
+  void clickThis()
   {
     if( isDragging )
     {
       isDragging = false;
       resizing[0] = NONE;
       resizing[1] = NONE;
+    }
+    else
+    {
+      println("Clicked ", name);
     }
   }
   
@@ -309,28 +304,6 @@ public class TemplateCanvas extends Panel
       }
     }
   }
-  
-//  void zoomIn()
-//  {
-//    zoom *= 1.2;
-//    offsetX -= int(50 * canvas.zoom);
-//    offsetY -= int(50 * canvas.zoom);
-//    constrainOffsets();
-//  }
-//  
-//  void zoomOut()
-//  {
-//    canvas.zoom /= 1.2;
-//    canvas.offsetX += int(50 * canvas.zoom);
-//    canvas.offsetY += int(50 * canvas.zoom);
-//    constrainOffsets();
-//  }
-//  
-//  void constrainOffsets()
-//  {
-//    offsetX = constrain(offsetX , int(wid * zoom * -1) + 200, width - 200);
-//    offsetY = constrain(offsetY , int(hei * zoom * -1) + 200, height - 200);
-//  }
   
   void setResizing( Element e, int mx, int my)
   {

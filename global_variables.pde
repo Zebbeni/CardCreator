@@ -9,3 +9,6 @@ int BORDER_RIGHT = 4;
 
 int border_select_width = 5;
 int move_step = 1;
+
+Object lastItemClicked;
+float zoom = 0.6;
