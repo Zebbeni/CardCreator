@@ -2,10 +2,6 @@ public class Listbox extends ParentPanel
 {
     int listHeight;
     
-    ArrayList<Element> items;
-    int selectedItem = NONE;
-    int hoverItem = NONE;
-    
     int itemHeight;
     int itemWidth;
     
@@ -13,13 +9,11 @@ public class Listbox extends ParentPanel
     int scrolltabHeight;
     int scrolltabX;
     int scrolltabY;
-    int scrollDist = 0;
     
     int maxScrollDist = 0;
-
     int listStartAt = 0;
     
-    Listbox ( String nm , int xx, int yy, int ww, int hh, int ih, ArrayList<Element> e)
+    Listbox ( String nm , int xx, int yy, int ww, int hh, int ih )
     {
         name = nm; x = xx; y = yy; wid = ww; hei = hh;
         wid = ww;
@@ -28,7 +22,8 @@ public class Listbox extends ParentPanel
         
         itemHeight = ih; itemWidth = wid - scrolltabWidth;
         
-        items = e;
+        refreshItems();
+        
         calculateListHeight();
         updateScrollTab();
         
@@ -36,16 +31,25 @@ public class Listbox extends ParentPanel
         Interactive.add( this );
     }
     
-    public void addItem ( Element item )
+    public void refreshItems( )
     {
-        if ( items == null ) items = new ArrayList();
-        items.add( item );
+      childPanels = new ArrayList<Panel>();
+      for( Element e : elements )
+      {
+        addItem( e );
+      }
+    }
+    
+    public void addItem ( Element e )
+    {
+      MenuItem item = new MenuItem( 0 , 0 , itemWidth , itemHeight , e);
+      childPanels.add( item );
     }
     
     public void removeItem ( Element item )
     {
-      items.remove(item);
-      selectedItem = NONE;
+      elements.remove(item);
+      selectedElement = NONE;
       hoverItem = NONE;
     }
     
@@ -57,43 +61,19 @@ public class Listbox extends ParentPanel
     }
     
     void updateThis ()
-    {  
-        updatePosition();
-        drawPG.beginDraw();
-        drawPG.background(200);
-        drawPG.noStroke();
-        drawPG.fill( 100 );
-        drawPG.rect( 0 , 0 - scrollDist, wid , listHeight );
-        if ( items != null )
-        {
-            for ( int i = 0; i < items.size(); i++ )
-            {
-                drawPG.stroke( 80 );
-                drawPG.fill( 200 );
-                if (items.get(i).selected)
-                {
-                  drawPG.fill( 255 );
-                }
-                else if(items.get(i).hovered)
-                {
-                  drawPG.fill(215);
-                }
-                drawPG.rect( 0, (i*itemHeight) - scrollDist, wid, itemHeight );
-                
-                drawPG.noStroke();
-                drawPG.fill( 0 );
-                drawPG.text( items.get(i+listStartAt).name, 25, (i+1)*(itemHeight) - 20 - scrollDist );
-            }
-        }
-        
-        //draw scrollbar
-        drawPG.stroke(80);
-        drawPG.fill(100);
-        drawPG.rect(itemWidth, 0, wid, hei);
-        drawPG.fill(200);
-        drawPG.rect(scrolltabX, scrolltabY, scrolltabWidth, scrolltabHeight);
-
-        drawPG.endDraw();
+    {
+      updatePosition();
+      drawPG.background(200);
+      drawPG.noStroke();
+      drawPG.fill( 100 );
+      drawPG.rect( 0 , 0 - scrollDist, wid , listHeight );
+      
+      //draw scrollbar
+      drawPG.stroke(80);
+      drawPG.fill(100);
+      drawPG.rect(itemWidth, 0, wid, hei);
+      drawPG.fill(200);
+      drawPG.rect(scrolltabX, scrolltabY, scrolltabWidth, scrolltabHeight);
     }
     
     /**
@@ -104,7 +84,6 @@ public class Listbox extends ParentPanel
       hei = height - y - 100;
       updateMaxScrollDist();
       updateScrollTab();
-      drawPG = createGraphics(wid, hei);
     }
     
     void updateMaxScrollDist()
@@ -114,7 +93,7 @@ public class Listbox extends ParentPanel
     }
     
     void calculateListHeight(){
-      listHeight = itemHeight * items.size();
+      listHeight = itemHeight * elements.size();
     }
     
     void updateScrollTab()
@@ -144,57 +123,34 @@ public class Listbox extends ParentPanel
     
     void hoverItem( int my )
     {
-      int listClick = my + scrollDist - y;
-      int index = ceil(listClick / itemHeight);
-      if ( index >= items.size())
-      {
-        if( hoverItem != NONE )
-        {
-          items.get(hoverItem).hovered = false;
-          hoverItem = NONE;
-        } 
-    }
-      else
-      {
-        if(hoverItem != NONE)
-        {
-          items.get(hoverItem).hovered = false;
-        }
-        hoverItem = index;
-        items.get(hoverItem).hovered = true;
-      }
+//      int listClick = my + scrollDist - y;
+//      int index = ceil(listClick / itemHeight);
+//      if ( index >= elements.size())
+//      {
+//        if( hoverItem != NONE )
+//        {
+//          elements.get(hoverItem).hovered = false;
+//          hoverItem = NONE;
+//        } 
+//    }
+//      else
+//      {
+//        if(hoverItem != NONE)
+//        {
+//          elements.get(hoverItem).hovered = false;
+//        }
+//        hoverItem = index;
+//        elements.get(hoverItem).hovered = true;
+//      }
     }
     
     void unHover()
     {
-      if( hoverItem != NONE)
-      {
-        items.get(hoverItem).hovered = false;
-        hoverItem = NONE;
-      }
-    }
-    
-    void selectItem( int my )
-    {
-      int listClick = my + scrollDist - y;
-      int index = int(listClick / itemHeight);
-      if(index >= items.size())
-      {
-        if( selectedItem != NONE)
-        {
-          items.get(selectedItem).selected = false;
-        }
-        selectedItem = NONE;
-      }
-      else
-      {
-        if( selectedItem != NONE)
-        {
-          items.get(selectedItem).selected = false;
-        }
-        selectedItem = index;
-        items.get(selectedItem).selected = true;
-      }
+//      if( hoverItem != NONE)
+//      {
+//        elements.get(hoverItem).hovered = false;
+//        hoverItem = NONE;
+//      }
     }
     
     void clickScrollBar( int my )
@@ -204,7 +160,6 @@ public class Listbox extends ParentPanel
     
     void clickThis()
     {
-      println("Clicked ", name);
     }
     
     boolean inItem( int mx, int my)
