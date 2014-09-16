@@ -25,6 +25,5 @@ public abstract class ChildPanel extends Panel
      * draws thisPG to the parentPG
      */
     parentPG.image( drawPG , x , y );
-    println("x: ", x, "y: ", y);
   }
 }

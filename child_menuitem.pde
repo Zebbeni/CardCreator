@@ -15,23 +15,20 @@ public class MenuItem extends ChildPanel
   
   public void updateThis()
   {
-    if(element.index == 2)
+    y = (element.index * hei) - scrollDist;
+    drawPG.fill( 200 );
+    if (element.selected)
     {
-      y = (element.index * hei) - scrollDist;
-      drawPG.fill( 200 );
-//    if (element.selected)
-//    {
-//      drawPG.fill( 255 );
-//    }
-//    else if(element.hovered)
-//    {
-//      drawPG.fill(215);
-//    }
-      drawPG.rect( x , y , wid , hei );
-    
-//    drawPG.noStroke();
-      drawPG.fill( 0 );
-      drawPG.text( element.name, x + 25, y );
+      drawPG.fill( 255 );
     }
+    else if(element.hovered)
+    {
+      drawPG.fill(215);
+    }
+    drawPG.rect( 0 , 0 , wid , hei );
+  
+    drawPG.noStroke();
+    drawPG.fill( 0 );
+    drawPG.text( element.name, 25, 25 );
   }
 }
