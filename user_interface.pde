@@ -8,6 +8,8 @@ TemplateCanvas canvas;
 Toolbar tools;
 Interface mainInterface;
 
+ArrayList<Element> elements;
+
 void setup ()
 {
     size(1000, 700);
@@ -20,9 +22,12 @@ void setup ()
     
     // create a list box
     template = new TemplateHandler();
-    listbox = new Listbox("element menu", width - 150 , 35 , 150 , 400 , 50 , template.elements );
+    
+    elements = template.elements;
+    
+    listbox = new Listbox("element menu", width - 150 , 35 , 150 , 400 , 50 );
     content = new ContentHandler( );
-    canvas = new TemplateCanvas("canvas", template.elements, content.table, 200, 30, 675, 1050);
+    canvas = new TemplateCanvas("canvas", content.table, 200, 30, 675, 1050);
     tools = new Toolbar("toolbar", width - 150 , 0 , 150 , 35 );
     
     ArrayList<Panel> parentPanels = new ArrayList<Panel>();
@@ -46,14 +51,12 @@ void draw ()
 
 void mouseMoved()
 {
-  if (listbox.handleMoved(mouseX,mouseY)){
-    
-  }
+  mainInterface.hover( mouseX , mouseY );
 }
 
 void mouseDragged()
 {
-  if (canvas.handleDragged(mouseX,mouseY,listbox.selectedItem)){
+  if (canvas.handleDragged(mouseX,mouseY,selectedElement)){
     
   }
 }

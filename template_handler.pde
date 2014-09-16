@@ -75,9 +75,9 @@ public class TemplateHandler
   {  
     tempTable = loadTable(filename, "header");
     
+    int idx = 0;
     for (TableRow row : tempTable.rows()) 
     {
-      
       String name = getElemName(row.getString("element"));
       int type = getType(row.getString("type"));
       int x = getX(row.getString("x"));
@@ -85,7 +85,8 @@ public class TemplateHandler
       int w = getHei(row.getString("w"));
       int h = getWid(row.getString("h"));
       
-      Element e = new Element(name, type, x, y, w, h);
+      Element e = new Element(name, type, idx, x, y, w, h);
+      idx += 1;
       
       if (type == TXT)
       {

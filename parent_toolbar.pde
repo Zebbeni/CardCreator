@@ -26,6 +26,7 @@ public class Toolbar extends ParentPanel
   
   void updateThis()
   {
+    x = width - wid;
     drawPG.fill(200);
     drawPG.rect(0, 0, wid, hei);
   }
@@ -33,5 +34,10 @@ public class Toolbar extends ParentPanel
   void clickThis()
   {
     println("Clicked ", name);
+  }
+  
+  void hoverThis()
+  {
+    println("Hovering on ", name);
   }
 }

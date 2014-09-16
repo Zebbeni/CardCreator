@@ -4,7 +4,6 @@ public class TemplateCanvas extends ParentPanel
   PImage cardPic;
   PFont drawFont;
   
-  ArrayList<Element> elements;
   Table contents;
   
   int canvasWid;
@@ -24,10 +23,9 @@ public class TemplateCanvas extends ParentPanel
   int lastMX;
   int lastMY;
   
-  TemplateCanvas (String nm, ArrayList<Element> e, Table conts, int xx, int yy, int canW, int canH)
+  TemplateCanvas (String nm, Table conts, int xx, int yy, int canW, int canH)
   {
     name = nm; x = xx; y = yy; wid = int(canW * zoom); hei = int(canH * zoom);
-    elements = e;
     canvasWid = canW;
     canvasHei = canH;
     contents = conts;
@@ -255,6 +253,11 @@ public class TemplateCanvas extends ParentPanel
     lastMY = my;
   }
   
+  void hoverThis()
+  {
+    println("Hovering on ", name);
+  }
+  
   void clickThis()
   {
     if( isDragging )
@@ -265,7 +268,7 @@ public class TemplateCanvas extends ParentPanel
     }
     else
     {
-      println("Clicked ", name);
+//      println("Clicked ", name);
     }
   }
   

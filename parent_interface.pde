@@ -16,11 +16,18 @@ public class Interface extends ParentPanel
   
   void updateThis()
   {
+    wid = width;
+    hei = height;
     drawPG.background(100);
   }
   
   void clickThis()
   {
     println("Clicked ", name);
+  }
+  
+  void hoverThis()
+  {
+    println("Hovering on ", name);
   }
 }

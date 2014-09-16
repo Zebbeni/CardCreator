@@ -16,25 +16,57 @@ void constrainOffsets()
 
 void addElement()
 {
-  Element e = new Element("New Element", IMG, 2, 2, 200, 250);
+  Element e = new Element("New Element", IMG, elements.size(), 2, 2, 200, 250);
+  elements.add(e);
   listbox.addItem(e);
   content.table.addColumn(e.name);
 }
 
 void removeElement()
 {
-  int selectedId = listbox.selectedItem;
+  int selectedId = selectedElement;
   if (selectedId != NONE)
   {
-    Element e = listbox.items.get(selectedId);
+    Element e = elements.get(selectedId);
     content.table.removeColumn(e.name);
     listbox.removeItem(e);
   }
 }
 
+void selectElement(Element e)
+{
+  if( selectedElement != NONE)
+  {
+    elements.get(selectedElement).selected = false;
+  }
+  e.selected = true;
+  selectedElement = e.index;
+}
+
+void hoverElement(Element e)
+{
+  if( e == null )
+  {
+    if( hoveredElement != NONE)
+    {
+      elements.get(hoveredElement).hovered = false;
+    }
+    hoveredElement = NONE;
+  }
+  else
+  {
+    if( hoveredElement != NONE)
+    {
+      elements.get(hoveredElement).hovered = false;
+    }
+    e.hovered = true;
+    hoveredElement = e.index;
+  }
+}
+
 public void handleArrowPress(  )
 {
-  int selectedId = listbox.selectedItem;
+  int selectedId = selectedElement;
   canvas.handleArrowPress( selectedId );
 }
 

@@ -12,7 +12,12 @@ public class Button extends ChildPanel
   
   public void clickThis()
   {
-    println("clicked ", name);
+    println("clicked on ", name);
+  }
+  
+  public void hoverThis()
+  {
+    println("hovering on ", name);
   }
   
   public void updateThis()

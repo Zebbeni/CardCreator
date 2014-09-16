@@ -2,6 +2,8 @@ public class Element
 {
   String name;
   int type;
+  int index;
+  
   int x;
   float realX;
   int y;
@@ -10,19 +12,22 @@ public class Element
   float realWid;
   int hei;
   float realHei;
+  
   float hSquish = 1.0;
   String fontString = ""; //this is a String for the font file to load.
   PFont font;
   int fontSize = 0;
   String colorString = "FFFFFF";
   color col = unhex("FFFFFFFF");
+  
   boolean selected = false;
   boolean hovered = false;
   
-  Element (String nn, int tt, int xx, int yy, int ww, int hh)
+  Element (String nn, int tt, int idx, int xx, int yy, int ww, int hh)
   {
    name = nn;
    type = tt;
+   index = idx;
    x = xx;
    realX = x;
    y = yy;

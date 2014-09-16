@@ -12,3 +12,8 @@ int move_step = 1;
 
 Object lastItemClicked;
 float zoom = 0.6;
+
+int scrollDist = 0;
+
+int selectedElement = NONE;
+int hoveredElement = NONE;
