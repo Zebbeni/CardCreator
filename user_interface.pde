@@ -51,9 +51,7 @@ void draw ()
 
 void mouseMoved()
 {
-  if (listbox.handleMoved(mouseX,mouseY)){
-    
-  }
+  mainInterface.hover( mouseX , mouseY );
 }
 
 void mouseDragged()

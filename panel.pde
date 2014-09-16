@@ -10,6 +10,9 @@ public abstract class Panel
   public abstract void clickThis();
   public abstract boolean click( int mx , int my );
   
+  public abstract void hoverThis();
+  public abstract boolean hover( int mx , int my);
+  
   public abstract void updateThis();
   public abstract void updateDraw();
   public abstract void drawToBuffer( PGraphics parentPG);
@@ -27,7 +30,7 @@ public abstract class Panel
     /**
      * Returns true if the given mouse X and mouse Y lie in this panel
      */
-    boolean isHere = (mx > x && mx < (x + wid) && my > y && y < (my + hei));
+    boolean isHere = (mx > x && mx < (x + wid) && my > y && my < (y + hei));
     return isHere;
   }
 }

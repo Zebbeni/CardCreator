@@ -253,6 +253,11 @@ public class TemplateCanvas extends ParentPanel
     lastMY = my;
   }
   
+  void hoverThis()
+  {
+    println("Hovering on ", name);
+  }
+  
   void clickThis()
   {
     if( isDragging )

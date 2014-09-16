@@ -13,10 +13,15 @@ public class MenuItem extends ChildPanel
     selectElement( element );
   }
   
+  public void hoverThis()
+  {
+    hoverElement(element);
+  }
+  
   public void updateThis()
   {
     y = (element.index * hei) - scrollDist;
-    drawPG.fill( 200 );
+    drawPG.fill( 210 );
     if (element.selected)
     {
       drawPG.fill( 255 );

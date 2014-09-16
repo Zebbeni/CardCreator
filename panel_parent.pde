@@ -22,8 +22,29 @@ public abstract class ParentPanel extends Panel
         clickThis();
       }
     }
-    
     return clickedInHere;
+  }
+  
+  public boolean hover( int mx , int my)
+  {
+    /*
+     * Passes relative mouse position to all children until it finds the one hovered
+     */ 
+    boolean hoveredInHere = isInPanel( mx , my );
+    
+    if( hoveredInHere )
+    {
+      boolean hoveredChild = false;
+      for( int i = 0; i < childPanels.size() && !hoveredChild ; i++ )
+      {
+        hoveredChild = childPanels.get(i).click( mx - x, my - y);
+      }
+      if( !hoveredChild )
+      {
+        hoverThis();
+      }
+    }
+    return hoveredInHere;
   }
   
   public void updateDraw()

@@ -43,6 +43,27 @@ void selectElement(Element e)
   selectedElement = e.index;
 }
 
+void hoverElement(Element e)
+{
+  if( e == null )
+  {
+    if( hoveredElement != NONE)
+    {
+      elements.get(hoveredElement).hovered = false;
+    }
+    hoveredElement = NONE;
+  }
+  else
+  {
+    if( hoveredElement != NONE)
+    {
+      elements.get(hoveredElement).hovered = false;
+    }
+    e.hovered = true;
+    hoveredElement = e.index;
+  }
+}
+
 public void handleArrowPress(  )
 {
   int selectedId = selectedElement;

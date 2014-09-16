@@ -14,6 +14,20 @@ public abstract class ChildPanel extends Panel
     return clickedInHere;
   }
   
+  public boolean hover( int mx , int my )
+  {
+    /**
+     * Returns true if the click occurred in this panel
+     * calls class-specific click function with mouse X and mouse Y
+     */
+    boolean hoveredInHere = isInPanel( mx , my );
+    if ( hoveredInHere ) 
+    {
+      hoverThis();
+    }
+    return hoveredInHere;
+  }
+  
   public void updateDraw()
   {
     updateThis();

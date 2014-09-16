@@ -35,4 +35,9 @@ public class Toolbar extends ParentPanel
   {
     println("Clicked ", name);
   }
+  
+  void hoverThis()
+  {
+    println("Hovering on ", name);
+  }
 }

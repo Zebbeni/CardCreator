@@ -50,7 +50,7 @@ public class Listbox extends ParentPanel
     {
       elements.remove(item);
       selectedElement = NONE;
-      hoverItem = NONE;
+      hoveredElement = NONE;
     }
     
     // called from manager
@@ -104,54 +104,60 @@ public class Listbox extends ParentPanel
       scrolltabY = int(float(hei * scrollDist) / float(listHeight)); //tabY is relative to drawPG 
     }
     
-    boolean handleMoved ( int mx, int my)
-    {
-      if(isInPanel(mx,my))
-      {
-        if(inItem(mx,my))
-        {
-          hoverItem(my);
-        }
-        return true;
-      }
-      else
-      {
-        unHover();
-        return false;
-      }
-    }
-    
-    void hoverItem( int my )
-    {
-//      int listClick = my + scrollDist - y;
-//      int index = ceil(listClick / itemHeight);
-//      if ( index >= elements.size())
+//    boolean handleMoved ( int mx, int my)
+//    {
+//      if(isInPanel(mx,my))
 //      {
-//        if( hoverItem != NONE )
+//        if(inItem(mx,my))
 //        {
-//          elements.get(hoverItem).hovered = false;
-//          hoverItem = NONE;
-//        } 
-//    }
+//          hoverItem(my);
+//        }
+//        return true;
+//      }
 //      else
 //      {
-//        if(hoverItem != NONE)
-//        {
-//          elements.get(hoverItem).hovered = false;
-//        }
-//        hoverItem = index;
-//        elements.get(hoverItem).hovered = true;
+//        unHover();
+//        return false;
 //      }
+//    }
+    
+    void hoverThis()
+    {
+      hoverElement( null );
+      println("Hovering on ", name);
     }
     
-    void unHover()
-    {
-//      if( hoverItem != NONE)
-//      {
-//        elements.get(hoverItem).hovered = false;
-//        hoverItem = NONE;
-//      }
-    }
+//    void hoverItem( int my )
+//    {
+////      int listClick = my + scrollDist - y;
+////      int index = ceil(listClick / itemHeight);
+////      if ( index >= elements.size())
+////      {
+////        if( hoverItem != NONE )
+////        {
+////          elements.get(hoverItem).hovered = false;
+////          hoverItem = NONE;
+////        } 
+////    }
+////      else
+////      {
+////        if(hoverItem != NONE)
+////        {
+////          elements.get(hoverItem).hovered = false;
+////        }
+////        hoverItem = index;
+////        elements.get(hoverItem).hovered = true;
+////      }
+//    }
+//    
+//    void unHover()
+//    {
+////      if( hoverItem != NONE)
+////      {
+////        elements.get(hoverItem).hovered = false;
+////        hoverItem = NONE;
+////      }
+//    }
     
     void clickScrollBar( int my )
     {

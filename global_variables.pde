@@ -16,4 +16,4 @@ float zoom = 0.6;
 int scrollDist = 0;
 
 int selectedElement = NONE;
-int hoverItem = NONE;
+int hoveredElement = NONE;

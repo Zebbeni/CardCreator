@@ -23,6 +23,11 @@ public class Interface extends ParentPanel
   
   void clickThis()
   {
-//    println("Clicked ", name);
+    println("Clicked ", name);
+  }
+  
+  void hoverThis()
+  {
+    println("Hovering on ", name);
   }
 }
